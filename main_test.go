@@ -7,6 +7,7 @@ import (
 
 	gojson "github.com/goccy/go-json"
 	jsoniter "github.com/json-iterator/go"
+	"github.com/lemon-mint/golang-json-benchmark/types"
 	segmentio "github.com/segmentio/encoding/json"
 	"github.com/wI2L/jettison"
 )
@@ -146,6 +147,78 @@ func BenchmarkSegmentioUnmarshal(b *testing.B) {
 			if err != nil {
 				b.Fatal(err)
 			}
+		}
+	})
+}
+
+func BenchmarkVstructMarshal(b *testing.B) {
+	b.RunParallel(func(p *testing.PB) {
+		for p.Next() {
+			// func types.New_JSONStructVstruct(Age int64, ID int64, Uint uint64, Int int64, Uint8 uint8, Uint16 uint16, Uint32 uint32, Uint64 uint64, Int8 int8, Int16 int16, Int32 int32, Int64 int64, Float32 float32, Float64 float64, Name string, Lang string) types.JSONStructVstruct
+			types.New_JSONStructVstruct(
+				int64(jsonStruct.Age),
+				int64(jsonStruct.ID),
+				uint64(jsonStruct.Uint),
+				int64(jsonStruct.Int),
+				jsonStruct.Uint8,
+				jsonStruct.Uint16,
+				jsonStruct.Uint32,
+				jsonStruct.Uint64,
+				jsonStruct.Int8,
+				jsonStruct.Int16,
+				jsonStruct.Int32,
+				jsonStruct.Int64,
+				jsonStruct.Float32,
+				jsonStruct.Float64,
+				jsonStruct.Name,
+				jsonStruct.Lang,
+			)
+		}
+	})
+}
+
+var jsonStructVstructBytes = types.New_JSONStructVstruct(
+	int64(jsonStruct.Age),
+	int64(jsonStruct.ID),
+	uint64(jsonStruct.Uint),
+	int64(jsonStruct.Int),
+	jsonStruct.Uint8,
+	jsonStruct.Uint16,
+	jsonStruct.Uint32,
+	jsonStruct.Uint64,
+	jsonStruct.Int8,
+	jsonStruct.Int16,
+	jsonStruct.Int32,
+	jsonStruct.Int64,
+	jsonStruct.Float32,
+	jsonStruct.Float64,
+	jsonStruct.Name,
+	jsonStruct.Lang,
+)
+
+func BenchmarkVstructUnmarshal(b *testing.B) {
+	b.RunParallel(func(p *testing.PB) {
+		data := jsonStructVstructBytes
+		for p.Next() {
+			if !data.Vstruct_Validate() {
+				b.Fatal("validation failed")
+			}
+			_ = data.Age()
+			_ = data.ID()
+			_ = data.Uint()
+			_ = data.Int()
+			_ = data.Uint8()
+			_ = data.Uint16()
+			_ = data.Uint32()
+			_ = data.Uint64()
+			_ = data.Int8()
+			_ = data.Int16()
+			_ = data.Int32()
+			_ = data.Int64()
+			_ = data.Float32()
+			_ = data.Float64()
+			_ = data.Name()
+			_ = data.Lang()
 		}
 	})
 }
