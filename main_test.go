@@ -10,6 +10,7 @@ import (
 	"github.com/lemon-mint/golang-json-benchmark/types"
 	segmentio "github.com/segmentio/encoding/json"
 	shamaton_msgpack "github.com/shamaton/msgpack/v2"
+	shamaton_msgpackgen "github.com/shamaton/msgpackgen/msgpack"
 	vmihailenco_msgpack "github.com/vmihailenco/msgpack/v5"
 	"github.com/wI2L/jettison"
 )
@@ -274,6 +275,38 @@ func BenchmarkShamatonMsgpackUnmarshal(b *testing.B) {
 		for p.Next() {
 			var v JSONStruct
 			err := shamaton_msgpack.Unmarshal(data, &v)
+			if err != nil {
+				b.Fatal(err)
+			}
+		}
+	})
+}
+
+//go:generate go get github.com/shamaton/msgpackgen/internal/generator
+//go:generate go run github.com/shamaton/msgpackgen
+//go:generate go mod tidy
+
+func BenchmarkShamatonMsgpackGenMarshal(b *testing.B) {
+	b.RunParallel(func(p *testing.PB) {
+		for p.Next() {
+			data, err := shamaton_msgpackgen.Marshal(jsonStruct)
+			if err != nil {
+				b.Fatal(err)
+			}
+			_ = data
+		}
+	})
+}
+
+func BenchmarkShamatonMsgpackGenUnmarshal(b *testing.B) {
+	b.RunParallel(func(p *testing.PB) {
+		data, err := shamaton_msgpackgen.Marshal(jsonStruct)
+		if err != nil {
+			b.Fatal(err)
+		}
+		for p.Next() {
+			var v JSONStruct
+			err := shamaton_msgpackgen.Unmarshal(data, &v)
 			if err != nil {
 				b.Fatal(err)
 			}
