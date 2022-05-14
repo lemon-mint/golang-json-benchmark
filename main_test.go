@@ -9,6 +9,8 @@ import (
 	jsoniter "github.com/json-iterator/go"
 	"github.com/lemon-mint/golang-json-benchmark/types"
 	segmentio "github.com/segmentio/encoding/json"
+	shamaton_msgpack "github.com/shamaton/msgpack/v2"
+	vmihailenco_msgpack "github.com/vmihailenco/msgpack/v5"
 	"github.com/wI2L/jettison"
 )
 
@@ -219,6 +221,62 @@ func BenchmarkVstructUnmarshal(b *testing.B) {
 			_ = data.Float64()
 			_ = data.Name()
 			_ = data.Lang()
+		}
+	})
+}
+
+func BenchmarkVmihailencoMsgpackMarshal(b *testing.B) {
+	b.RunParallel(func(p *testing.PB) {
+		for p.Next() {
+			data, err := vmihailenco_msgpack.Marshal(jsonStruct)
+			if err != nil {
+				b.Fatal(err)
+			}
+			_ = data
+		}
+	})
+}
+
+func BenchmarkVmihailencoMsgpackUnmarshal(b *testing.B) {
+	b.RunParallel(func(p *testing.PB) {
+		data, err := vmihailenco_msgpack.Marshal(jsonStruct)
+		if err != nil {
+			b.Fatal(err)
+		}
+		for p.Next() {
+			var v JSONStruct
+			err := vmihailenco_msgpack.Unmarshal(data, &v)
+			if err != nil {
+				b.Fatal(err)
+			}
+		}
+	})
+}
+
+func BenchmarkShamatonMsgpackMarshal(b *testing.B) {
+	b.RunParallel(func(p *testing.PB) {
+		for p.Next() {
+			data, err := shamaton_msgpack.Marshal(jsonStruct)
+			if err != nil {
+				b.Fatal(err)
+			}
+			_ = data
+		}
+	})
+}
+
+func BenchmarkShamatonMsgpackUnmarshal(b *testing.B) {
+	b.RunParallel(func(p *testing.PB) {
+		data, err := shamaton_msgpack.Marshal(jsonStruct)
+		if err != nil {
+			b.Fatal(err)
+		}
+		for p.Next() {
+			var v JSONStruct
+			err := shamaton_msgpack.Unmarshal(data, &v)
+			if err != nil {
+				b.Fatal(err)
+			}
 		}
 	})
 }
