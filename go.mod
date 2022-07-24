@@ -3,7 +3,7 @@ module github.com/lemon-mint/golang-json-benchmark
 go 1.17
 
 require (
-	github.com/goccy/go-json v0.9.8
+	github.com/goccy/go-json v0.9.10
 	github.com/json-iterator/go v1.1.12
 	github.com/segmentio/encoding v0.3.5
 	github.com/shamaton/msgpack/v2 v2.1.0
