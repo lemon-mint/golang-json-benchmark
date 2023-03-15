@@ -313,3 +313,26 @@ func BenchmarkShamatonMsgpackGenUnmarshal(b *testing.B) {
 		}
 	})
 }
+
+func BenchmarkGOBEMarshal(b *testing.B) {
+	b.RunParallel(func(p *testing.PB) {
+		var b []byte = make([]byte, jsonStruct.SizeGOBE())
+		for p.Next() {
+			_ = jsonStruct.MarshalGOBE(b)
+		}
+	})
+}
+
+func BenchmarkGOBEUnmarshal(b *testing.B) {
+	b.RunParallel(func(p *testing.PB) {
+		var data []byte = make([]byte, jsonStruct.SizeGOBE())
+		_ = jsonStruct.MarshalGOBE(data)
+		var v JSONStruct
+		for p.Next() {
+			_, ok := v.UnmarshalGOBE(data)
+			if !ok {
+				b.Fatal("validation failed")
+			}
+		}
+	})
+}
