@@ -8,7 +8,7 @@ require (
 	github.com/segmentio/encoding v0.3.6
 	github.com/shamaton/msgpack/v2 v2.1.1
 	github.com/shamaton/msgpackgen v0.3.0
-	github.com/vmihailenco/msgpack/v5 v5.3.5
+	github.com/vmihailenco/msgpack/v5 v5.4.1
 	github.com/wI2L/jettison v0.7.4
 )
 
