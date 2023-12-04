@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/goccy/go-json v0.10.2
 	github.com/json-iterator/go v1.1.12
-	github.com/segmentio/encoding v0.3.6
+	github.com/segmentio/encoding v0.3.7
 	github.com/shamaton/msgpack/v2 v2.1.1
 	github.com/shamaton/msgpackgen v0.3.0
 	github.com/vmihailenco/msgpack/v5 v5.3.5
